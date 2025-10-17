@@ -2,6 +2,7 @@ package app;
 
 import course.*;
 import user.Student;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ public class Database {
     private final List<Course> courses = new ArrayList<>();
 
     private Database() {
-        // Курсы создаются через Builder (паттерн Builder)
         Course math = new CourseBuilder()
                 .setType("math")
                 .setTitle("Mathematics")

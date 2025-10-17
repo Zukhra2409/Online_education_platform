@@ -6,7 +6,7 @@ public abstract class BaseCourse implements Course {
     protected final String title;
     protected final double price;
     protected final String level;
-    protected LearningPlatform platform;
+    protected LearningPlatform platform; // Bridge
 
     protected BaseCourse(String title, double price, String level) {
         this.title = title;
@@ -20,10 +20,11 @@ public abstract class BaseCourse implements Course {
 
     @Override
     public void deliverContent() {
-        if (platform != null)
+        if (platform != null) {
             platform.renderCourse(title);
-        else
+        } else {
             System.out.println("🖥 Course " + title + " started (default platform).");
+        }
     }
 
     @Override public String getTitle() { return title; }

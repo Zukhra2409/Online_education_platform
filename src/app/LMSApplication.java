@@ -14,8 +14,6 @@ import java.util.Scanner;
 public class LMSApplication {
     private final Scanner scanner = new Scanner(System.in);
     private final Database db = Database.getInstance();
-
-    // ✅ Adapter Pattern — уведомления через внешний e-mail API
     private final NotificationService notify = new EmailAdapter(new ExternalEmailAPI());
 
     private final AuthService auth = new AuthService(db);
@@ -25,19 +23,14 @@ public class LMSApplication {
 
     public void start() {
         System.out.println("===== Welcome to Zukhra Edu LMS =====");
-
         while (true) {
             System.out.println("\n1) Register  2) Login  3) Exit");
             System.out.print("Choose option: ");
             String choice = scanner.nextLine().trim();
-
             switch (choice) {
                 case "1" -> doRegister();
                 case "2" -> doLogin();
-                case "3" -> {
-                    System.out.println("Goodbye!");
-                    return;
-                }
+                case "3" -> { System.out.println("Goodbye!"); return; }
                 default -> System.out.println("Invalid choice.");
             }
         }
@@ -48,7 +41,6 @@ public class LMSApplication {
         String name = scanner.nextLine().trim();
         System.out.print("Create password: ");
         String pass = scanner.nextLine();
-
         if (auth.register(name, pass)) {
             notify.send("✅ Registration successful for " + name);
         } else {
@@ -61,7 +53,6 @@ public class LMSApplication {
         String name = scanner.nextLine().trim();
         System.out.print("Enter password: ");
         String pass = scanner.nextLine();
-
         Student s = auth.login(name, pass);
         if (s != null) {
             currentUser = s;
@@ -80,7 +71,6 @@ public class LMSApplication {
             System.out.println("3) Logout");
             System.out.print("Choose: ");
             String choice = scanner.nextLine().trim();
-
             switch (choice) {
                 case "1" -> showCatalogAndEnroll();
                 case "2" -> progress.showProgress(currentUser);
@@ -105,9 +95,7 @@ public class LMSApplication {
         if (idx <= 0 || idx > catalog.size()) return;
 
         Course chosen = catalog.get(idx - 1);
-
-        // ✅ Decorator Pattern — добавляем опции
-        chosen = decorateCourseInteractive(chosen);
+        chosen = decorateCourseInteractive(chosen); // Decorator
 
         currentUser.enroll(chosen);
         progress.addCourse(currentUser, chosen);
@@ -117,7 +105,6 @@ public class LMSApplication {
 
     private Course decorateCourseInteractive(Course base) {
         Course result = base;
-
         System.out.print("Add Certificate? (y/n): ");
         if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
             result = new CertificateDecorator(result);
@@ -130,12 +117,10 @@ public class LMSApplication {
         if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
             result = new GamificationDecorator(result);
         }
-
         System.out.printf("Selected: %s (decorated)%n", result.getTitle());
         return result;
     }
 
-    // ✅ Bridge Pattern — выбор платформы (Web / Mobile)
     private void learnLoop(Course course) {
         while (true) {
             System.out.println("\n=== " + course.getTitle() + " ===");
@@ -144,18 +129,13 @@ public class LMSApplication {
             System.out.println("3) Back to main menu");
             System.out.print("Choose: ");
             String ch = scanner.nextLine().trim();
-
             switch (ch) {
                 case "1" -> {
                     System.out.print("Choose platform (1-Web / 2-Mobile): ");
-                    String platformChoice = scanner.nextLine().trim();
-
-                    if (platformChoice.equals("2") && course instanceof BaseCourse base) {
-                        base.setPlatform(new MobilePlatform());
-                    } else if (course instanceof BaseCourse base) {
-                        base.setPlatform(new WebPlatform());
+                    String p = scanner.nextLine().trim();
+                    if (course instanceof BaseCourse base) {
+                        base.setPlatform(p.equals("2") ? new MobilePlatform() : new WebPlatform());
                     }
-
                     course.deliverContent();
                 }
                 case "2" -> {

@@ -32,7 +32,6 @@ public class ProgressTracker {
             System.out.println("No enrolled courses yet.");
             return;
         }
-        map.forEach((c, p) ->
-                System.out.printf(" - %s: %d%%%n", c.getTitle(), p));
+        map.forEach((c, p) -> System.out.printf(" - %s: %d%%%n", c.getTitle(), p));
     }
 }

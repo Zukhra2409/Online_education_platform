@@ -1,6 +1,5 @@
 package service;
 
-
 public class EmailAdapter extends NotificationService {
     private final ExternalEmailAPI emailAPI;
 
@@ -10,10 +9,9 @@ public class EmailAdapter extends NotificationService {
 
     @Override
     public void send(String message) {
-
         emailAPI.sendEmail(
                 "student@example.com",
-                "Zukhra Edu LMS Notification",
+                "EduSmart LMS Notification",
                 message
         );
     }
