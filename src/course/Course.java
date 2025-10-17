@@ -1,4 +1,9 @@
 package course;
 
-public class Course {
+public interface Course {
+    String getTitle();
+    double getPrice();
+    String getLevel();
+
+    void deliverContent();
 }

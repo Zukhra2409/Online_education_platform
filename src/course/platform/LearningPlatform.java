@@ -1,4 +1,5 @@
 package course.platform;
 
-public class LearningPlatform {
+public interface LearningPlatform {
+    void renderCourse(String title);
 }
